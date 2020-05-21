@@ -1,0 +1,7 @@
+SERVICE_COUNT=$(az network vnet subnet show --resource-group $() --vnet-name $() --name $() --query "length([serviceEndpoints][].{service:service}[?service=='Microsoft.KeyVault'])")
+
+if [[ $SERVICE_COUNT -eq 0 ]]
+then
+  COUNT=$(az network vnet subnet show --resource-group $() --vnet-name $() --name $() --query 'length([serviceEndpoints][])')
+  az network vnet subnet update --resource-group $() --vnet-name $() --name $() --add serviceEndpoints {} --set serviceEndpoints[$COUNT].service="Microsoft.KeyVault"
+fi
